@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The [City] Homeowner's Guide — Upsize or Downsize Without Losing Money</title>
+
+  <!-- ============================================================
+    FUNNEL: Guide / Download Hook — Smart Scaling Seller
+    TYPE: Lead Magnet Opt-In Page (Survey Flow)
+    SECTIONS: 3 (Hero+Survey / Proof+Value / Final CTA)
+    GHL FRIENDLY: Yes — use GHL native Survey builder for Step 1
+  ============================================================ -->
+
+  <style>
+    /* ─────────────────────────────────────────────
+       BRAND IDENTITY
+       Primary:    #1A2B47  Deep Navy
+       Secondary:  #2E6FA8  Steel Blue
+       Accent:     #E8A020  Warm Gold
+       Background: #F5F4F1  Off-White
+       Text:       #1C1C1E
+       Muted:      #6B7280
+    ───────────────────────────────────────────── */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #1A2B47;
+      --blue:   #2E6FA8;
+      --gold:   #E8A020;
+      --bg:     #F5F4F1;
+      --white:  #FFFFFF;
+      --text:   #1C1C1E;
+      --muted:  #6B7280;
+      --radius: 6px;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    /* ─── UTILITY ─── */
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 3px;
+      margin-bottom: 20px;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 16px 32px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s ease, transform 0.15s ease;
+      width: 100%;
+      text-align: center;
+    }
+    .btn-primary:hover {
+      background: #d4901a;
+      transform: translateY(-1px);
+    }
+
+    /* ─── NAVBAR ─── */
+    .navbar {
+      background: var(--navy);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 18px 0;
+    }
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-family: 'Georgia', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .logo span { color: var(--gold); }
+    .nav-right {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION 1 — HERO
+    ───────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, #1A2B47 0%, #0f1e33 60%, #1e3a5f 100%);
+      padding: 72px 0 80px;
+    }
+
+    .hero .container {
+      display: grid;
+      grid-template-columns: 1fr 440px;
+      gap: 52px;
+      align-items: start;
+    }
+
+    .hero h1 {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: clamp(28px, 3.6vw, 44px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.18;
+      margin-bottom: 18px;
+    }
+    .hero h1 em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.65;
+      max-width: 480px;
+      margin-bottom: 30px;
+    }
+
+    .hero-bullets {
+      list-style: none;
+    }
+    .hero-bullets li {
+      font-size: 14.5px;
+      color: rgba(255,255,255,0.82);
+      padding: 8px 0 8px 26px;
+      position: relative;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .hero-bullets li:last-child { border-bottom: none; }
+    .hero-bullets li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    /* ─────────────────────────────────────────────
+       SURVEY CARD
+    ───────────────────────────────────────────── */
+    .survey-card {
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.24);
+      overflow: hidden;
+    }
+
+    /* Progress bar */
+    .survey-progress-track {
+      background: #E5E7EB;
+      height: 4px;
+      width: 100%;
+    }
+    .survey-progress-fill {
+      background: var(--gold);
+      height: 4px;
+      width: 9.09%; /* step 1 of 11 */
+      transition: width 0.35s ease;
+    }
+
+    .survey-inner {
+      padding: 28px 28px 24px;
+    }
+
+    .survey-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .survey-step-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+    .survey-step-dots {
+      display: flex;
+      gap: 4px;
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #D1D5DB;
+      transition: background 0.2s;
+    }
+    .dot.active { background: var(--gold); }
+    .dot.done   { background: var(--blue); }
+
+    .survey-question {
+      font-family: 'Georgia', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.35;
+      margin-bottom: 18px;
+    }
+
+    /* ─── OPTION PILLS ─── */
+    .survey-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .survey-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13.5px;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .survey-option:hover {
+      border-color: #B0C4DE;
+      background: #F0F4F9;
+    }
+    .survey-option.selected {
+      border-color: var(--blue);
+      background: #EEF4FB;
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    .option-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #D1D5DB;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .survey-option.selected .option-check {
+      border-color: var(--blue);
+      background: var(--blue);
+    }
+    .option-check-inner {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--white);
+      opacity: 0;
+      transition: opacity 0.1s;
+    }
+    .survey-option.selected .option-check-inner { opacity: 1; }
+
+    /* ─── OPEN TEXT (Q10) ─── */
+    .survey-textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--bg);
+      resize: vertical;
+      min-height: 90px;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 16px;
+    }
+    .survey-textarea:focus { border-color: var(--blue); background: var(--white); }
+    .survey-textarea::placeholder { color: #9CA3AF; }
+
+    /* ─── CONTACT FIELDS ─── */
+    .contact-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .contact-fields input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .contact-fields input:focus {
+      border-color: var(--blue);
+      background: var(--white);
+    }
+    .contact-fields input::placeholder { color: #9CA3AF; }
+
+    /* ─── SURVEY NAV ─── */
+    .survey-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .btn-back {
+      font-size: 13px;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 0;
+      text-decoration: none;
+      transition: color 0.15s;
+      flex-shrink: 0;
+    }
+    .btn-back:hover { color: var(--navy); }
+    .btn-back.hidden { visibility: hidden; pointer-events: none; }
+
+    .btn-next {
+      flex: 1;
+      background: var(--navy);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 13px 20px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-next:hover { background: #253d60; transform: translateY(-1px); }
+    .btn-next.hidden { display: none; }
+
+    .btn-submit {
+      flex: 1;
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 700;
+      padding: 15px 20px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-submit:hover { background: #d4901a; transform: translateY(-1px); }
+    .btn-submit.hidden { display: none; }
+
+    .survey-disclaimer {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    /* ─── SURVEY STEPS (show/hide) ─── */
+    .survey-step { display: none; }
+    .survey-step.active { display: block; }
+
+    /* ─── AUTO-ADVANCE OVERLAY (subtle flash on select) ─── */
+    .advance-hint {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+
+    /* ─── THANK YOU STATE ─── */
+    .survey-thankyou {
+      display: none;
+      text-align: center;
+      padding: 20px 0 8px;
+    }
+    .survey-thankyou .ty-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+    .survey-thankyou h3 {
+      font-family: 'Georgia', serif;
+      font-size: 20px;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .survey-thankyou p {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION 2 — PROOF / VALUE
+    ───────────────────────────────────────────── */
+    .value {
+      background: var(--white);
+      padding: 80px 0;
+      border-top: 1px solid #E5E7EB;
+      border-bottom: 1px solid #E5E7EB;
+    }
+
+    .value .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 14px;
+    }
+
+    .value h2 {
+      font-family: 'Georgia', serif;
+      font-size: clamp(24px, 3vw, 34px);
+      color: var(--navy);
+      font-weight: 700;
+      line-height: 1.22;
+      margin-bottom: 20px;
+    }
+
+    .value-body {
+      font-size: 16px;
+      color: #4B5563;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .inside-list { list-style: none; }
+    .inside-list li {
+      display: flex;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid #F3F4F6;
+      align-items: flex-start;
+    }
+    .inside-list li:last-child { border-bottom: none; }
+
+    .list-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #EEF4FB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+
+    .list-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 3px;
+    }
+    .list-text span {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .agent-block {
+      background: #F5F4F1;
+      border-radius: 10px;
+      padding: 32px;
+    }
+
+    .quote-mark {
+      font-family: 'Georgia', serif;
+      font-size: 64px;
+      color: var(--gold);
+      line-height: 0.6;
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .testimonial-text {
+      font-family: 'Georgia', serif;
+      font-size: 17px;
+      color: var(--navy);
+      line-height: 1.6;
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+
+    .agent-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .agent-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 700;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .agent-details strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .agent-details span {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: #E5E7EB;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 28px;
+    }
+    .stat-item {
+      background: var(--white);
+      padding: 20px 12px;
+      text-align: center;
+    }
+    .stat-item strong {
+      display: block;
+      font-family: 'Georgia', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .stat-item span {
+      font-size: 11.5px;
+      color: var(--muted);
+      line-height: 1.4;
+      display: block;
+      margin-top: 4px;
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION 3 — FINAL CTA
+    ───────────────────────────────────────────── */
+    .cta-section {
+      background: linear-gradient(135deg, #1A2B47 0%, #0f1e33 100%);
+      padding: 88px 0;
+      text-align: center;
+    }
+
+    .cta-section .container { max-width: 600px; }
+
+    .cta-section h2 {
+      font-family: 'Georgia', serif;
+      font-size: clamp(24px, 3.5vw, 38px);
+      color: var(--white);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .cta-section h2 em { color: var(--gold); font-style: normal; }
+
+    .cta-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.65;
+      margin-bottom: 36px;
+    }
+
+    .cta-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 400px;
+      margin: 0 auto 14px;
+    }
+    .cta-form input {
+      padding: 13px 16px;
+      border: 1.5px solid rgba(255,255,255,0.18);
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-family: inherit;
+      background: rgba(255,255,255,0.08);
+      color: var(--white);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .cta-form input:focus {
+      border-color: var(--gold);
+      background: rgba(255,255,255,0.13);
+    }
+    .cta-form input::placeholder { color: rgba(255,255,255,0.4); }
+
+    .cta-disclaimer {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 10px;
+    }
+
+    .trust-badges {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #0f1e33;
+      padding: 24px 0;
+      text-align: center;
+    }
+    footer p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.28);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 820px) {
+      .hero .container,
+      .value .container {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .hero { padding: 48px 0 52px; }
+      .survey-card { max-width: 500px; }
+      .value { padding: 56px 0; }
+      .cta-section { padding: 64px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAVBAR ─── -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">[Agent Name] <span>Real Estate</span></div>
+      <div class="nav-right">Free Guide — No Obligation</div>
+    </div>
+  </nav>
+
+
+  <!-- ══════════════════════════════════════════
+       SECTION 1 — HERO + SURVEY
+       GHL: Section (dark navy gradient)
+         → Row (2 col: ~55% / ~45%)
+           → Col 1: Tag + H1 + Subtext + Bullets
+           → Col 2: GHL Survey element (11 steps)
+  ══════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="container">
+
+      <!-- Column 1: Copy -->
+      <div>
+        <span class="tag">Free Guide — [City] Homeowners</span>
+
+        <h1>
+          How to Upsize or Downsize
+          <em>Without Losing Money</em>
+          in [City]'s Market
+        </h1>
+
+        <p class="hero-sub">
+          Take our quick 2-minute quiz and we'll send you a personalized
+          guide based on your exact situation — plus a free equity
+          estimate for your current home.
+        </p>
+
+        <ul class="hero-bullets">
+          <li>Sell first vs. buy first — which order protects you</li>
+          <li>How to use your equity to fund the upgrade (or simplify)</li>
+          <li>The bridging gap strategy most agents never mention</li>
+          <li>Avoid the #1 financial mistake during a home transition</li>
+        </ul>
+      </div>
+
+      <!-- Column 2: Multi-Step Survey Card -->
+      <div>
+        <div class="survey-card" id="surveyCard">
+
+          <!-- Progress bar -->
+          <div class="survey-progress-track">
+            <div class="survey-progress-fill" id="progressFill"></div>
+          </div>
+
+          <div class="survey-inner">
+
+            <!-- Step dots (visual only — 10 survey + 1 contact) -->
+            <div class="survey-meta">
+              <span class="survey-step-label" id="stepLabel">Question 1 of 10</span>
+              <div class="survey-step-dots" id="stepDots"></div>
+            </div>
+
+            <!-- ─── STEP 1 ─── -->
+            <div class="survey-step active" data-step="1">
+              <div class="survey-question">What best describes your situation right now?</div>
+              <div class="survey-options" data-autoadvance="true">
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q1" value="growing_family" hidden />
+                  Growing family — we need more space
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q1" value="kids_out" hidden />
+                  Kids moved out — ready to simplify
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q1" value="retiring" hidden />
+                  Retiring — want something easier to maintain
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q1" value="relocating" hidden />
+                  Relocating for work or lifestyle
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q1" value="financial" hidden />
+                  Financial move — reduce costs or cash out equity
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q1" value="other" hidden />
+                  Something else
+                </label>
+              </div>
+              <p class="advance-hint">Tap an option to continue</p>
+            </div>
+
+            <!-- ─── STEP 2 ─── -->
+            <div class="survey-step" data-step="2">
+              <div class="survey-question">What type of home do you currently own?</div>
+              <div class="survey-options" data-autoadvance="true">
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q2" value="single_family" hidden />
+                  Single-family home
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q2" value="condo" hidden />
+                  Condo or townhome
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q2" value="multi" hidden />
+                  Multi-family (duplex, etc.)
+                </label>
+              </div>
+              <p class="advance-hint">Tap an option to continue</p>
+            </div>
+
+            <!-- ─── STEP 3 ─── -->
+            <div class="survey-step" data-step="3">
+              <div class="survey-question">Roughly, what's your current home worth?</div>
+              <div class="survey-options" data-autoadvance="true">
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q3" value="under300" hidden />
+                  Under $300K
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q3" value="300_500" hidden />
+                  $300K – $500K
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q3" value="500_750" hidden />
+                  $500K – $750K
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q3" value="750_1m" hidden />
+                  $750K – $1M
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q3" value="over1m" hidden />
+                  Over $1M
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q3" value="notsure" hidden />
+                  Not sure — that's what I want to find out
+                </label>
+              </div>
+              <p class="advance-hint">Tap an option to continue</p>
+            </div>
+
+            <!-- ─── STEP 4 ─── -->
+            <div class="survey-step" data-step="4">
+              <div class="survey-question">Do you have a mortgage on your current home?</div>
+              <div class="survey-options" data-autoadvance="true">
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q4" value="yes_monthly" hidden />
+                  Yes — still paying monthly
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q4" value="yes_almostdone" hidden />
+                  Yes — but almost paid off
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q4" value="free_clear" hidden />
+                  No — own it free and clear
+                </label>
+              </div>
+              <p class="advance-hint">Tap an option to continue</p>
+            </div>
+
+            <!-- ─── STEP 5 ─── -->
+            <div class="survey-step" data-step="5">
+              <div class="survey-question">What's your timeline for making this move?</div>
+              <div class="survey-options" data-autoadvance="true">
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q5" value="asap" hidden />
+                  0–30 days — need to move fast
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q5" value="1_3mo" hidden />
+                  1–3 months
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q5" value="3_6mo" hidden />
+                  3–6 months
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q5" value="6_12mo" hidden />
+                  6–12 months
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q5" value="exploring" hidden />
+                  Just exploring for now
+                </label>
+              </div>
+              <p class="advance-hint">Tap an option to continue</p>
+            </div>
+
+            <!-- ─── STEP 6 ─── -->
+            <div class="survey-step" data-step="6">
+              <div class="survey-question">What does your next home look like?</div>
+              <div class="survey-options" data-autoadvance="true">
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q6" value="bigger" hidden />
+                  Bigger — more bedrooms, more space
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q6" value="smaller" hidden />
+                  Smaller — less to maintain
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q6" value="diff_location" hidden />
+                  Different neighborhood or city
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q6" value="diff_type" hidden />
+                  Different property type (e.g., condo → house)
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q6" value="notsure_next" hidden />
+                  Not sure yet
+                </label>
+              </div>
+              <p class="advance-hint">Tap an option to continue</p>
+            </div>
+
+            <!-- ─── STEP 7 ─── -->
+            <div class="survey-step" data-step="7">
+              <div class="survey-question">What's your budget for the next home?</div>
+              <div class="survey-options" data-autoadvance="true">
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q7" value="under300" hidden />
+                  Under $300K
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q7" value="300_500" hidden />
+                  $300K – $500K
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q7" value="500_750" hidden />
+                  $500K – $750K
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q7" value="750_1m" hidden />
+                  $750K – $1M
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q7" value="over1m" hidden />
+                  Over $1M
+                </label>
+              </div>
+              <p class="advance-hint">Tap an option to continue</p>
+            </div>
+
+            <!-- ─── STEP 8 ─── -->
+            <div class="survey-step" data-step="8">
+              <div class="survey-question">Where are you with financing for the next purchase?</div>
+              <div class="survey-options" data-autoadvance="true">
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q8" value="preapproved" hidden />
+                  Already pre-approved
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q8" value="talking_lender" hidden />
+                  Talking to a lender
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q8" value="use_equity" hidden />
+                  Plan to use equity from my sale
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q8" value="cash" hidden />
+                  Cash buyer
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q8" value="havent_started" hidden />
+                  Haven't started yet
+                </label>
+              </div>
+              <p class="advance-hint">Tap an option to continue</p>
+            </div>
+
+            <!-- ─── STEP 9 ─── -->
+            <div class="survey-step" data-step="9">
+              <div class="survey-question">Are you currently working with a real estate agent?</div>
+              <div class="survey-options" data-autoadvance="true">
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q9" value="yes_agent" hidden />
+                  Yes
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q9" value="no_agent" hidden />
+                  No
+                </label>
+                <label class="survey-option">
+                  <span class="option-check"><span class="option-check-inner"></span></span>
+                  <input type="radio" name="q9" value="had_one" hidden />
+                  Had one but it didn't work out
+                </label>
+              </div>
+              <p class="advance-hint">Tap an option to continue</p>
+            </div>
+
+            <!-- ─── STEP 10 ─── -->
+            <div class="survey-step" data-step="10">
+              <div class="survey-question">Anything specific you're worried about with this move? <span style="font-size:13px;font-weight:400;color:#6B7280;">(Optional)</span></div>
+              <textarea
+                class="survey-textarea"
+                name="q10"
+                placeholder="e.g. Selling before I find the next one, market timing, affording the upgrade, downsizing logistics..."
+              ></textarea>
+              <div class="survey-nav">
+                <button type="button" class="btn-back" data-back>← Back</button>
+                <button type="button" class="btn-next" data-next>Continue →</button>
+              </div>
+            </div>
+
+            <!-- ─── STEP 11: CONTACT ─── -->
+            <div class="survey-step" data-step="11">
+              <div class="survey-question">Almost done — where should we send your free guide?</div>
+              <div class="contact-fields">
+                <input type="text"  name="first_name" placeholder="Your First Name"     required />
+                <input type="email" name="email"      placeholder="Your Email Address"  required />
+                <input type="tel"   name="phone"      placeholder="Phone (optional)" />
+              </div>
+              <div class="survey-nav">
+                <button type="button" class="btn-back" data-back>← Back</button>
+                <button type="button" class="btn-submit" id="submitBtn">Send Me the Guide →</button>
+              </div>
+              <p class="survey-disclaimer">
+                No spam. No obligation. Your info is 100% private.
+              </p>
+            </div>
+
+            <!-- ─── THANK YOU ─── -->
+            <div class="survey-thankyou" id="surveyThankyou">
+              <div class="ty-icon">&#127775;</div>
+              <h3>You're all set — check your inbox!</h3>
+              <p>
+                Your guide is on its way. While you wait, feel free
+                to scroll down to see what's inside.
+              </p>
+            </div>
+
+          </div><!-- /survey-inner -->
+        </div><!-- /survey-card -->
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       SECTION 2 — PROOF / VALUE
+  ══════════════════════════════════════════ -->
+  <section class="value">
+    <div class="container">
+
+      <div>
+        <div class="section-label">What's Inside the Guide</div>
+        <h2>Everything You Need to Make a Smart Move</h2>
+        <p class="value-body">
+          Most homeowners get this wrong — they jump into the market without a clear
+          plan and end up overpaying, rushing, or missing out on equity they've spent
+          years building. This guide closes that gap.
+        </p>
+
+        <ul class="inside-list">
+          <li>
+            <div class="list-icon">&#127968;</div>
+            <div class="list-text">
+              <strong>Sell First or Buy First?</strong>
+              <span>A clear breakdown of both strategies — and which one fits your situation.</span>
+            </div>
+          </li>
+          <li>
+            <div class="list-icon">&#128200;</div>
+            <div class="list-text">
+              <strong>Your Equity Playbook</strong>
+              <span>How to calculate and leverage your home's equity to fund your next move on your terms.</span>
+            </div>
+          </li>
+          <li>
+            <div class="list-icon">&#128336;</div>
+            <div class="list-text">
+              <strong>The Bridging Gap Strategy</strong>
+              <span>How to avoid living in limbo between selling and buying — and keep the transition smooth.</span>
+            </div>
+          </li>
+          <li>
+            <div class="list-icon">&#9888;&#65039;</div>
+            <div class="list-text">
+              <strong>The 3 Costly Mistakes to Avoid</strong>
+              <span>Real scenarios where homeowners lost money — and how to sidestep each one.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="agent-block">
+          <span class="quote-mark">&ldquo;</span>
+          <p class="testimonial-text">
+            "I've helped over [X] [City] families make this exact transition.
+            The biggest regrets always come from not having a plan.
+            This guide is the plan."
+          </p>
+          <div class="agent-info">
+            <div class="agent-avatar">[A]</div>
+            <div class="agent-details">
+              <strong>[Agent Full Name]</strong>
+              <span>[Brokerage Name] &middot; [City] Real Estate</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-item">
+            <strong>[X]+</strong>
+            <span>Families Helped</span>
+          </div>
+          <div class="stat-item">
+            <strong>[X] Yrs</strong>
+            <span>In [City] Market</span>
+          </div>
+          <div class="stat-item">
+            <strong>5&#9733;</strong>
+            <span>Avg. Rating</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       SECTION 3 — FINAL CTA (backup for scrollers)
+  ══════════════════════════════════════════ -->
+  <section class="cta-section">
+    <div class="container">
+
+      <h2>
+        Still Thinking It Over?
+        <em>The Guide Is Free.</em>
+      </h2>
+
+      <p class="cta-sub">
+        No sales pitch. No obligation. Just a clear, honest roadmap
+        for [City] homeowners who want to move smart — not just fast.
+      </p>
+
+      <form class="cta-form">
+        <input type="text"  placeholder="First Name" />
+        <input type="email" placeholder="Email Address" />
+        <button type="submit" class="btn-primary" style="background:var(--gold);color:var(--navy);font-size:15px;padding:15px;">
+          Send Me the Free Guide &rarr;
+        </button>
+      </form>
+
+      <p class="cta-disclaimer">We respect your privacy. No spam — ever.</p>
+
+      <div class="trust-badges">
+        <div class="badge">&#128274;&nbsp; 100% Secure</div>
+        <div class="badge">&#9889;&nbsp; Instant Delivery</div>
+        <div class="badge">&#127775;&nbsp; Free — No Obligation</div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <p>
+      &copy; 2026 [Agent Name] Real Estate &middot; [City], [State] &middot;
+      [Brokerage Name] &middot; All Rights Reserved<br />
+      This site is not affiliated with Facebook, Google, or any platform provider.
+    </p>
+  </footer>
+
+
+  <!-- ══════════════════════════════════════════
+       SURVEY LOGIC
+       Minimal vanilla JS — handles:
+       · Step show/hide
+       · Radio auto-advance (200ms delay)
+       · Progress bar + step label update
+       · Back navigation
+       · Submit → thank you state
+
+       NOTE FOR GHL:
+       Replace this entire card with GHL's native
+       Survey builder element. GHL handles all
+       multi-step logic natively with no code.
+       Map each step 1:1 to GHL survey steps.
+  ══════════════════════════════════════════ -->
+  <script>
+    (function () {
+      const TOTAL_SURVEY_STEPS = 10;
+      const TOTAL_STEPS        = 11; // 10 survey + 1 contact
+
+      let currentStep = 1;
+
+      const steps       = document.querySelectorAll('.survey-step');
+      const progressFill = document.getElementById('progressFill');
+      const stepLabel   = document.getElementById('stepLabel');
+      const dotsContainer = document.getElementById('stepDots');
+      const thankyou    = document.getElementById('surveyThankyou');
+
+      // Build dots (10 survey steps only)
+      for (let i = 1; i <= TOTAL_SURVEY_STEPS; i++) {
+        const d = document.createElement('span');
+        d.classList.add('dot');
+        if (i === 1) d.classList.add('active');
+        dotsContainer.appendChild(d);
+      }
+
+      function getStepEl(n) {
+        return document.querySelector(`.survey-step[data-step="${n}"]`);
+      }
+
+      function updateUI(step) {
+        // Steps
+        steps.forEach(s => s.classList.remove('active'));
+        const el = getStepEl(step);
+        if (el) el.classList.add('active');
+
+        // Progress (11 steps total, fills to 100% at contact step)
+        const pct = Math.round((step / TOTAL_STEPS) * 100);
+        progressFill.style.width = pct + '%';
+
+        // Label
+        if (step <= TOTAL_SURVEY_STEPS) {
+          stepLabel.textContent = `Question ${step} of ${TOTAL_SURVEY_STEPS}`;
+        } else {
+          stepLabel.textContent = 'Last step — almost done!';
+        }
+
+        // Dots
+        const dots = dotsContainer.querySelectorAll('.dot');
+        dots.forEach((d, i) => {
+          d.classList.remove('active', 'done');
+          if (i + 1 < step)  d.classList.add('done');
+          if (i + 1 === step) d.classList.add('active');
+        });
+      }
+
+      function goTo(step) {
+        if (step < 1 || step > TOTAL_STEPS) return;
+        currentStep = step;
+        updateUI(currentStep);
+      }
+
+      function goNext() {
+        if (currentStep < TOTAL_STEPS) goTo(currentStep + 1);
+      }
+
+      function goBack() {
+        if (currentStep > 1) goTo(currentStep - 1);
+      }
+
+      // Auto-advance on radio selection
+      document.querySelectorAll('.survey-options[data-autoadvance]').forEach(function (group) {
+        group.querySelectorAll('.survey-option').forEach(function (option) {
+          option.addEventListener('click', function () {
+            // Mark selected
+            group.querySelectorAll('.survey-option').forEach(o => o.classList.remove('selected'));
+            option.classList.add('selected');
+            const radio = option.querySelector('input[type=radio]');
+            if (radio) radio.checked = true;
+            // Advance after brief delay
+            setTimeout(goNext, 220);
+          });
+        });
+      });
+
+      // Back buttons
+      document.querySelectorAll('[data-back]').forEach(function (btn) {
+        btn.addEventListener('click', goBack);
+      });
+
+      // Next buttons (text/textarea steps)
+      document.querySelectorAll('[data-next]').forEach(function (btn) {
+        btn.addEventListener('click', goNext);
+      });
+
+      // Submit
+      document.getElementById('submitBtn').addEventListener('click', function () {
+        const nameEl  = document.querySelector('input[name="first_name"]');
+        const emailEl = document.querySelector('input[name="email"]');
+        if (!nameEl.value.trim() || !emailEl.value.trim()) {
+          nameEl.style.borderColor  = '#E8A020';
+          emailEl.style.borderColor = '#E8A020';
+          nameEl.focus();
+          return;
+        }
+        // Show thank you
+        getStepEl(11).style.display = 'none';
+        thankyou.style.display = 'block';
+        progressFill.style.width = '100%';
+        stepLabel.textContent = 'Complete — check your inbox!';
+        dotsContainer.querySelectorAll('.dot').forEach(d => {
+          d.classList.remove('active');
+          d.classList.add('done');
+        });
+        // TODO: wire to GHL form submission / webhook
+      });
+
+      // Init
+      updateUI(1);
+    })();
+  </script>
+
+</body>
+</html>
+
+<!--
+╔══════════════════════════════════════════════════════════════════════╗
+║         GHL BUILDER REFERENCE — SURVEY FUNNEL BLUEPRINT             ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HOW TO IMPLEMENT THE SURVEY IN GHL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use GHL's native SURVEY builder element (not a standard Form).
+Surveys in GHL natively support:
+  ✔ Multi-step flow
+  ✔ One question per slide
+  ✔ Radio / checkbox / text / textarea fields
+  ✔ Progress bar
+  ✔ Custom thank-you page or redirect
+
+SECTION 1 — HERO (GHL Page Builder)
+  → Section: bg gradient #1A2B47 → #0f1e33 (custom CSS)
+    → Row: 2 columns (~55% / ~45%), align: top
+      → Column 1: [standard text elements]
+          · Tag pill: Text element, gold bg #E8A020, navy text
+          · H1: Heading element, white, Georgia font
+          · Subheadline: Paragraph element, muted white
+          · Bullet list: 4× Text elements with ✓ prefix
+      → Column 2: [GHL Survey element]
+          · Drop Survey element into column
+          · Style survey card: white bg, border-radius 12px, shadow
+          · Configure steps 1–11 (see below)
+
+SURVEY STEP CONFIGURATION IN GHL
+────────────────────────────────
+  Step 1:  Single choice — "What best describes your situation?"
+           Options: Growing family / Kids moved out / Retiring /
+                    Relocating / Financial move / Something else
+
+  Step 2:  Single choice — "What type of home do you currently own?"
+           Options: Single-family / Condo or townhome / Multi-family
+
+  Step 3:  Single choice — "Roughly, what's your current home worth?"
+           Options: Under $300K / $300K–$500K / $500K–$750K /
+                    $750K–$1M / Over $1M / Not sure
+
+  Step 4:  Single choice — "Do you have a mortgage on your current home?"
+           Options: Yes – paying monthly / Yes – almost paid off /
+                    No – own free and clear
+
+  Step 5:  Single choice — "What's your timeline for making this move?"
+           Options: 0–30 days / 1–3 months / 3–6 months /
+                    6–12 months / Just exploring
+
+  Step 6:  Single choice — "What does your next home look like?"
+           Options: Bigger / Smaller / Different neighborhood or city /
+                    Different property type / Not sure yet
+
+  Step 7:  Single choice — "What's your budget for the next home?"
+           Options: Under $300K / $300K–$500K / $500K–$750K /
+                    $750K–$1M / Over $1M
+
+  Step 8:  Single choice — "Where are you with financing?"
+           Options: Pre-approved / Talking to a lender /
+                    Use equity from sale / Cash buyer / Haven't started
+
+  Step 9:  Single choice — "Are you currently working with an agent?"
+           Options: Yes / No / Had one but it didn't work out
+
+  Step 10: Long text — "Anything specific you're worried about?"
+           Placeholder: "e.g. Selling before I find the next one..."
+           Mark as optional.
+
+  Step 11 (Contact):
+           · First Name (text, required)
+           · Email (email, required)
+           · Phone (phone, optional)
+           · Submit button: gold bg #E8A020, navy text, "Send Me the Guide →"
+
+THANK YOU PAGE:
+  Set redirect to a thank-you page or show inline GHL confirmation message.
+  Trigger automation: tag lead, send guide PDF via email, start Day 0 SMS.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — PROOF / VALUE (unchanged)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  → Section: bg #FFFFFF
+    → Row: 2 columns (50/50), align top
+      → Col 1: Label + H2 + Body + 4-item icon list
+      → Col 2: Agent quote card + stat row
+
+SECTION 3 — FINAL CTA (backup for scrollers)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  → Section: dark navy gradient (custom CSS)
+    → Row: 1 column, centered, max-width 600px
+      → H2 + paragraph + simple 2-field GHL Form + trust badges
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+AUTOMATION TRIGGERS (GHL Workflows)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Survey submitted →
+    · Tag: "guide-download-funnel"
+    · Tag based on Q1 answer: "situation:growing_family" etc.
+    · Tag based on Q5 timeline: "timeline:asap" etc.
+    · Day 0:  Email — guide PDF + welcome
+    · Day 0:  SMS — "Just sent your guide to {email}!"
+    · Day 1:  Email — "The chapter most people skip..."
+    · Day 3:  Email/SMS — equity tip + soft question
+    · Day 5:  Email/SMS — "Want us to run the numbers?"
+                          → link to Strategy Session booking
+    · Day 7:  SMS — social proof + gentle nudge
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CUSTOM CSS FOR GHL (Page Settings → Custom CSS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+/* Hero + CTA section gradients */
+.hero-section-class {
+  background: linear-gradient(135deg, #1A2B47 0%, #0f1e33 60%, #1e3a5f 100%) !important;
+}
+.cta-dark-section-class {
+  background: linear-gradient(135deg, #1A2B47 0%, #0f1e33 100%) !important;
+}
+
+/* Survey card option selected state */
+.hl-survey-option.selected,
+.hl-survey-option:checked + label {
+  border: 2px solid #2E6FA8 !important;
+  background: #EEF4FB !important;
+  font-weight: 600 !important;
+}
+
+/* Survey progress bar color */
+.hl-survey-progress-fill {
+  background-color: #E8A020 !important;
+}
+
+/* Submit button */
+.hl-survey-submit-btn {
+  background-color: #E8A020 !important;
+  color: #1A2B47 !important;
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+}
+.hl-survey-submit-btn:hover {
+  background-color: #d4901a !important;
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PLACEHOLDER REPLACEMENT CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [City]            → e.g. Austin, Denver, Tampa
+  [State]           → State name
+  [Agent Name]      → Agent's name (navbar + footer)
+  [Agent Full Name] → Full name in quote block
+  [A]               → Agent initials (avatar)
+  [Brokerage Name]  → Brokerage name
+  [X]               → Real numbers (families, years)
+
+-->

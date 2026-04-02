@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Is Your Home Priced Right? — Free Seller Analysis</title>
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #FAF8FF;
+      color: #1A0A2E;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --navy:        #5B21B6;   /* rich violet — primary */
+      --navy-dark:   #150529;   /* near-black deep plum */
+      --gold:        #A855F7;   /* vivid violet accent */
+      --gold-light:  #C084FC;   /* soft lavender highlight */
+      --white:       #FFFFFF;
+      --off-white:   #FAF8FF;   /* barely-there lavender tint */
+      --light-gray:  #EDE9FE;   /* soft lavender border */
+      --mid-gray:    #9CA3AF;
+      --text-dark:   #1A0A2E;   /* deep plum-black text */
+      --text-mid:    #4B5563;
+      --text-light:  #6B7280;
+      --radius:      12px;
+      --radius-lg:   18px;
+      --shadow:      0 4px 20px rgba(91, 33, 182, 0.10);
+      --shadow-lg:   0 8px 40px rgba(91, 33, 182, 0.18);
+    }
+
+    /* ============================================================
+       PAGE ROUTING (JS toggles .active)
+    ============================================================ */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ============================================================
+       LAYOUT UTILITIES
+    ============================================================ */
+    .container        { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+    .container--narrow { max-width: 680px;  margin: 0 auto; padding: 0 24px; }
+    .container--mid   { max-width: 800px;  margin: 0 auto; padding: 0 24px; }
+
+    .text-center { text-align: center; }
+    .mt-12  { margin-top: 12px; }
+    .mt-20  { margin-top: 20px; }
+    .mt-28  { margin-top: 28px; }
+    .mt-40  { margin-top: 40px; }
+    .mb-12  { margin-bottom: 12px; }
+    .mb-20  { margin-bottom: 20px; }
+    .mb-28  { margin-bottom: 28px; }
+    .mb-40  { margin-bottom: 40px; }
+
+    /* ============================================================
+       TOPBAR
+    ============================================================ */
+    .topbar {
+      background: var(--navy-dark);
+      padding: 11px 24px;
+      text-align: center;
+    }
+    .topbar p {
+      color: var(--gold-light);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       SITE HEADER
+    ============================================================ */
+    .site-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--light-gray);
+      padding: 16px 24px;
+    }
+    .site-header .logo {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+    }
+    .site-header .logo span { color: var(--gold); }
+
+    /* ============================================================
+       PROGRESS BAR
+    ============================================================ */
+    .progress-wrap { background: var(--light-gray); height: 3px; }
+    .progress-fill {
+      height: 3px;
+      background: linear-gradient(90deg, var(--navy), var(--gold), var(--gold-light));
+      transition: width 0.45s ease;
+    }
+
+    /* ============================================================
+       HERO — LANDING PAGE
+    ============================================================ */
+    .hero {
+      background: linear-gradient(140deg, var(--navy-dark) 0%, var(--navy) 55%, #7C3AED 100%);
+      padding: 76px 24px 68px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -120px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(192,132,252,0.22) 0%, transparent 65%);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -100px;
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(124,58,237,0.28) 0%, transparent 65%);
+      border-radius: 50%;
+    }
+
+    .hero__badge {
+      display: inline-block;
+      background: rgba(168,85,247,0.15);
+      border: 1px solid rgba(168,85,247,0.4);
+      color: var(--gold-light);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 50px;
+      margin-bottom: 22px;
+    }
+
+    .hero__headline {
+      font-size: clamp(30px, 5.5vw, 54px);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.13;
+      letter-spacing: -0.025em;
+      margin-bottom: 18px;
+      max-width: 820px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero__headline .hl { color: var(--gold-light); }
+
+    .hero__sub {
+      font-size: 17px;
+      color: rgba(255,255,255,0.7);
+      max-width: 520px;
+      margin: 0 auto 52px;
+      font-weight: 400;
+    }
+
+    /* ============================================================
+       PATH CARDS (LANDING)
+    ============================================================ */
+    .path-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    @media (max-width: 640px) { .path-grid { grid-template-columns: 1fr; } }
+
+    .path-card {
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-lg);
+      padding: 36px 30px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .path-card:hover {
+      background: rgba(255,255,255,0.10);
+      border-color: var(--gold);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.28);
+    }
+    .path-card__icon { font-size: 34px; margin-bottom: 14px; display: block; }
+    .path-card__tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 7px;
+    }
+    .path-card__title {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+    .path-card__desc {
+      font-size: 13.5px;
+      color: rgba(255,255,255,0.62);
+      line-height: 1.6;
+      margin-bottom: 26px;
+    }
+    .path-card__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 800;
+      padding: 11px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+    .path-card:hover .path-card__btn { background: var(--gold-light); }
+
+    /* ============================================================
+       TRUST BAR
+    ============================================================ */
+    .trust-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--light-gray);
+      padding: 22px 24px;
+    }
+    .trust-bar__inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      flex-wrap: wrap;
+    }
+    .trust-item { display: flex; align-items: center; gap: 8px; }
+    .trust-item__icon { font-size: 17px; }
+    .trust-item__text { font-size: 13px; font-weight: 600; color: var(--text-mid); }
+
+    /* ============================================================
+       PROOF / STATS SECTION
+    ============================================================ */
+    .proof-section { background: var(--off-white); padding: 72px 24px; }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: clamp(24px, 3.8vw, 38px);
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: -0.025em;
+      line-height: 1.18;
+      margin-bottom: 14px;
+    }
+    .section-sub {
+      font-size: 16px;
+      color: var(--text-mid);
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 640px) { .stats-grid { grid-template-columns: 1fr; } }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .stat-card__num {
+      font-size: 42px;
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-card__num span { color: var(--gold); }
+    .stat-card__label {
+      font-size: 13px;
+      color: var(--text-mid);
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 640px) { .testimonial-grid { grid-template-columns: 1fr; } }
+
+    .testimonial-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      border-left: 3px solid var(--gold);
+    }
+    .testimonial-card__quote {
+      font-size: 14.5px;
+      color: var(--text-dark);
+      line-height: 1.65;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+    .testimonial-card__author { font-size: 13px; font-weight: 800; color: var(--navy); }
+    .testimonial-card__meta   { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+
+    /* ============================================================
+       SURVEY HEADER (used on survey pages)
+    ============================================================ */
+    .survey-header {
+      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 70%, #7C3AED 100%);
+      padding: 44px 24px 36px;
+      text-align: center;
+    }
+    .survey-header__step {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 9px;
+    }
+    .survey-header__title {
+      font-size: clamp(22px, 4.2vw, 36px);
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -0.022em;
+      line-height: 1.2;
+    }
+    .survey-header__sub {
+      font-size: 15px;
+      color: rgba(255,255,255,0.68);
+      margin-top: 9px;
+    }
+
+    /* ============================================================
+       FORM STYLES
+    ============================================================ */
+    .form-wrap { max-width: 660px; margin: 0 auto; padding: 48px 24px 56px; }
+
+    .form-group { margin-bottom: 30px; }
+
+    .form-label {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 13px;
+      line-height: 1.45;
+    }
+    .q-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 23px; height: 23px;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 900;
+      border-radius: 50%;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    .radio-group { display: flex; flex-direction: column; gap: 9px; }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      background: var(--white);
+      border: 1.5px solid var(--light-gray);
+      border-radius: 10px;
+      padding: 13px 17px;
+      cursor: pointer;
+      transition: all 0.18s;
+      font-size: 14px;
+      color: var(--text-dark);
+      font-weight: 500;
+      user-select: none;
+    }
+    .radio-option:hover {
+      border-color: var(--gold);
+      background: rgba(168,85,247,0.05);
+    }
+    .radio-option.selected {
+      border-color: var(--gold);
+      background: rgba(168,85,247,0.09);
+    }
+    .radio-option input[type="radio"],
+    .radio-option input[type="checkbox"] {
+      accent-color: var(--gold);
+      width: 16px; height: 16px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--light-gray);
+      border-radius: 10px;
+      font-size: 14.5px;
+      color: var(--text-dark);
+      background: var(--white);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--gold); }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 480px) { .two-col { grid-template-columns: 1fr; } }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--light-gray);
+      margin: 28px 0;
+    }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 900;
+      padding: 18px 32px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: -0.01em;
+      transition: all 0.22s;
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(168,85,247,0.40);
+    }
+
+    .btn-ghost {
+      display: block;
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--text-light);
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: center;
+      padding: 10px;
+      text-decoration: underline;
+    }
+    .btn-ghost:hover { color: var(--text-mid); }
+
+    /* ============================================================
+       RESULTS CARD
+    ============================================================ */
+    .results-section { padding: 56px 24px; background: var(--off-white); }
+
+    .results-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .results-card__head {
+      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 70%, #7C3AED 100%);
+      padding: 40px 36px 34px;
+      text-align: center;
+    }
+    .results-card__badge {
+      display: inline-block;
+      background: rgba(168,85,247,0.18);
+      border: 1px solid rgba(168,85,247,0.4);
+      color: var(--gold-light);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 50px;
+      margin-bottom: 14px;
+    }
+    .results-card__title {
+      font-size: clamp(20px, 4vw, 30px);
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -0.022em;
+      line-height: 1.2;
+      margin-bottom: 9px;
+    }
+    .results-card__sub { font-size: 14px; color: rgba(255,255,255,0.65); }
+
+    .results-card__body { padding: 36px; }
+
+    .report-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+    .report-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      background: var(--off-white);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .report-item__check {
+      width: 24px; height: 24px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--white);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .report-item__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.4;
+    }
+    .report-item__sub {
+      font-size: 12.5px;
+      color: var(--text-light);
+      margin-top: 3px;
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       URGENCY / CALLOUT BOX
+    ============================================================ */
+    .callout-box {
+      background: rgba(168,85,247,0.07);
+      border: 1.5px solid rgba(168,85,247,0.28);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 22px;
+    }
+    .callout-box p {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1.55;
+    }
+
+    /* ============================================================
+       BOOKING SECTION
+    ============================================================ */
+    .booking-section { padding: 60px 24px; background: var(--off-white); }
+
+    .booking-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      max-width: 740px;
+      margin: 0 auto;
+    }
+    .calendar-placeholder {
+      background: var(--light-gray);
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .calendar-placeholder__icon { font-size: 40px; }
+    .calendar-placeholder__text {
+      font-size: 14px;
+      color: var(--text-mid);
+      font-weight: 600;
+    }
+
+    .what-we-cover {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 28px 30px;
+      box-shadow: var(--shadow);
+      max-width: 740px;
+      margin: 28px auto 0;
+    }
+    .what-we-cover h4 {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .site-footer {
+      background: var(--navy-dark);
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .site-footer p { font-size: 12px; color: rgba(255,255,255,0.38); }
+
+    /* ============================================================
+       FADE IN ANIMATION (light, CSS-only)
+    ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .page.active > * { animation: fadeUp 0.4s ease forwards; }
+
+    /* ============================================================
+       DISQUALIFIED PAGE STYLES
+    ============================================================ */
+    .disq-section {
+      padding: 80px 24px;
+      text-align: center;
+    }
+    .disq-icon { font-size: 52px; margin-bottom: 20px; }
+    .disq-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .disq-sub {
+      font-size: 16px;
+      color: var(--text-mid);
+      max-width: 420px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+
+  </style>
+</head>
+<body>
+
+
+<!-- ================================================================
+     PAGE 0 — LANDING (Split Path)
+================================================================ -->
+<div id="page-landing" class="page active">
+
+  <div class="topbar">
+    <p>Free Analysis &nbsp;|&nbsp; No Obligation &nbsp;|&nbsp; Confidential</p>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="logo">The <span>Listing</span> Lab</div>
+    </div>
+  </header>
+
+  <!-- SECTION 1: HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__badge">Free Seller Analysis — Takes Under 3 Minutes</div>
+      <h1 class="hero__headline">
+        Your Home Should Be <span class="hl">Selling.</span><br>
+        Let's Find Out Exactly Why It's Not.
+      </h1>
+      <p class="hero__sub">
+        Answer a few quick questions. Get a personalized market analysis sent straight to your inbox — free, no strings attached.
+      </p>
+      <div class="path-grid">
+
+        <!-- Path A: FSBO -->
+        <div class="path-card" onclick="startPath('fsbo')">
+          <span class="path-card__icon">🏠</span>
+          <div class="path-card__tag">For FSBO Sellers</div>
+          <div class="path-card__title">I'm Selling My Home on My Own (FSBO)</div>
+          <p class="path-card__desc">
+            Listed it yourself — on Zillow, by sign, or through a flat-fee service. Wondering if you're priced right or leaving money on the table.
+          </p>
+          <button class="path-card__btn">Get My Free Market Analysis &rarr;</button>
+        </div>
+
+        <!-- Path B: Expired -->
+        <div class="path-card" onclick="startPath('expired')">
+          <span class="path-card__icon">📋</span>
+          <div class="path-card__tag">For Expired Listing Sellers</div>
+          <div class="path-card__title">My Listing Expired Without Selling</div>
+          <p class="path-card__desc">
+            You tried. It didn't sell. Something went wrong — and you need to know exactly what before you try again.
+          </p>
+          <button class="path-card__btn">Get My Free "Why It Didn't Sell" Analysis &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-bar__inner">
+      <div class="trust-item"><span class="trust-item__icon">🔒</span><span class="trust-item__text">100% Confidential</span></div>
+      <div class="trust-item"><span class="trust-item__icon">⚡</span><span class="trust-item__text">Results in Under 3 Minutes</span></div>
+      <div class="trust-item"><span class="trust-item__icon">✅</span><span class="trust-item__text">Zero Commitment Required</span></div>
+      <div class="trust-item"><span class="trust-item__icon">📊</span><span class="trust-item__text">Local Market Data Backed</span></div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: PROOF -->
+  <section class="proof-section">
+    <div class="container">
+
+      <div class="text-center mb-40">
+        <div class="section-label">Why This Matters</div>
+        <h2 class="section-title">Most Sellers Don't Know What's<br>Costing Them Thousands</h2>
+        <p class="section-sub" style="margin: 0 auto;">The gap between selling fast at top dollar and sitting on the market isn't luck. It's strategy — and data.</p>
+      </div>
+
+      <div class="stats-grid mb-40">
+        <div class="stat-card">
+          <div class="stat-card__num">85<span>%</span></div>
+          <div class="stat-card__label">of FSBOs eventually hire an agent — after losing weeks and often accepting less money</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__num">$<span>26K</span></div>
+          <div class="stat-card__label">average gap between FSBO sale price and agent-assisted sale price (NAR data)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__num">3<span>x</span></div>
+          <div class="stat-card__label">more likely to sell within 30 days with a professional marketing strategy vs. DIY listing</div>
+        </div>
+      </div>
+
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <p class="testimonial-card__quote">"I tried FSBO for two months — got nowhere. After getting the free analysis, I finally understood what I was doing wrong. Listed with an agent using their strategy and sold in 11 days over asking."</p>
+          <div class="testimonial-card__author">Maria L.</div>
+          <div class="testimonial-card__meta">Tampa, FL &mdash; FSBO to Sold in 11 Days</div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-card__quote">"My listing expired after 90 days with another agent. I got the free 'Why It Didn't Sell' analysis, booked the consultation, and relisted with a totally different strategy. Closed in 28 days at full price."</p>
+          <div class="testimonial-card__author">James R.</div>
+          <div class="testimonial-card__meta">Austin, TX &mdash; Expired to Sold in 28 Days</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>&copy; 2024 The Listing Lab. All rights reserved. &nbsp;|&nbsp; Privacy Policy &nbsp;|&nbsp; Terms of Service</p>
+  </footer>
+
+</div><!-- /page-landing -->
+
+
+<!-- ================================================================
+     PAGE 1A — FSBO SURVEY
+================================================================ -->
+<div id="page-fsbo-survey" class="page">
+
+  <div class="topbar">
+    <p>Step 1 of 2 &nbsp;&mdash;&nbsp; FSBO Market Analysis</p>
+  </div>
+
+  <header class="site-header">
+    <div class="container"><div class="logo">The <span>Listing</span> Lab</div></div>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-fill" style="width: 45%;"></div>
+  </div>
+
+  <!-- SECTION 1: SURVEY HEADER -->
+  <div class="survey-header">
+    <div class="survey-header__step">FSBO Market Analysis</div>
+    <h2 class="survey-header__title">Let's Analyze Your FSBO Listing</h2>
+    <p class="survey-header__sub">7 quick questions &mdash; we'll build your personalized market report instantly.</p>
+  </div>
+
+  <!-- SECTION 2: SURVEY FORM -->
+  <div class="form-wrap">
+    <form id="fsbo-form" onsubmit="return false;">
+
+      <!-- Q1 -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">1</span> How long has your home been on the market?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="fq1" value="under2w"> Just listed (under 2 weeks)</label>
+          <label class="radio-option"><input type="radio" name="fq1" value="2-4w"> 2&ndash;4 weeks</label>
+          <label class="radio-option"><input type="radio" name="fq1" value="1-2m"> 1&ndash;2 months</label>
+          <label class="radio-option"><input type="radio" name="fq1" value="2-3m"> 2&ndash;3 months</label>
+          <label class="radio-option"><input type="radio" name="fq1" value="3m+"> 3+ months</label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q2 -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">2</span> How did you determine your asking price?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="fq2" value="zillow"> Looked at Zillow / Redfin estimates</label>
+          <label class="radio-option"><input type="radio" name="fq2" value="neighbors"> Compared to neighbors who sold recently</label>
+          <label class="radio-option"><input type="radio" name="fq2" value="appraisal"> Had a professional appraisal done</label>
+          <label class="radio-option"><input type="radio" name="fq2" value="gut"> Gut feeling / what I need to net</label>
+          <label class="radio-option"><input type="radio" name="fq2" value="cma"> Used a CMA from an agent</label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q3 -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">3</span> Where is your home currently listed?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="fq3" value="zillow-only"> Zillow / FSBO sites only</label>
+          <label class="radio-option"><input type="radio" name="fq3" value="mls"> MLS via flat-fee service</label>
+          <label class="radio-option"><input type="radio" name="fq3" value="social"> Social media / word of mouth</label>
+          <label class="radio-option"><input type="radio" name="fq3" value="sign"> Yard sign only</label>
+          <label class="radio-option"><input type="radio" name="fq3" value="multiple"> Multiple platforms</label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q4 -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">4</span> How many showings have you had?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="fq4" value="0"> 0 &mdash; no one has toured it</label>
+          <label class="radio-option"><input type="radio" name="fq4" value="1-3"> 1&ndash;3 showings</label>
+          <label class="radio-option"><input type="radio" name="fq4" value="4-10"> 4&ndash;10 showings</label>
+          <label class="radio-option"><input type="radio" name="fq4" value="10+"> 10+ showings</label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q5 -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">5</span> Have you received any offers?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="fq5" value="no"> No offers</label>
+          <label class="radio-option"><input type="radio" name="fq5" value="low"> Yes &mdash; but too low</label>
+          <label class="radio-option"><input type="radio" name="fq5" value="fell"> Yes &mdash; deal fell through</label>
+          <label class="radio-option"><input type="radio" name="fq5" value="multiple"> Multiple offers, none worked out</label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q6 -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">6</span> What's been your biggest challenge?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="fq6" value="buyers"> Getting buyers to see it</label>
+          <label class="radio-option"><input type="radio" name="fq6" value="pricing"> Pricing it correctly</label>
+          <label class="radio-option"><input type="radio" name="fq6" value="negotiations"> Negotiations / legal paperwork</label>
+          <label class="radio-option"><input type="radio" name="fq6" value="photos"> Photography / presentation</label>
+          <label class="radio-option"><input type="radio" name="fq6" value="time"> Time and energy managing it all</label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q7: Property details -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">7</span> Tell us about your property</label>
+        <div class="two-col mb-12">
+          <input class="form-input" type="number" name="f_beds" placeholder="Bedrooms" min="1" max="20">
+          <input class="form-input" type="number" name="f_baths" placeholder="Bathrooms" min="1" max="20">
+        </div>
+        <div class="two-col mb-12">
+          <input class="form-input" type="text" name="f_sqft" placeholder="Square Footage">
+          <select class="form-input" name="f_type">
+            <option value="">Property Type</option>
+            <option>Single Family</option>
+            <option>Condo / Townhome</option>
+            <option>Multi-Family</option>
+            <option>Land / Lot</option>
+          </select>
+        </div>
+        <input class="form-input mb-12" type="text" name="f_zip" placeholder="City or Zip Code" style="margin-bottom: 10px;">
+        <input class="form-input" type="text" name="f_price" placeholder="Your Asking Price (e.g. $450,000)">
+      </div>
+
+      <hr class="divider">
+
+      <!-- Contact Capture -->
+      <div class="form-group">
+        <label class="form-label">Where should we send your free market report?</label>
+        <input class="form-input mb-12" type="text" name="f_name" placeholder="Your Full Name" style="margin-bottom: 10px;">
+        <input class="form-input mb-12" type="email" name="f_email" placeholder="Email Address" style="margin-bottom: 10px;">
+        <input class="form-input" type="tel" name="f_phone" placeholder="Phone Number (for follow-up on your report)">
+      </div>
+
+      <!-- SECTION 3: CTA -->
+      <button type="button" class="btn-primary" onclick="submitFsbo()">
+        Generate My Free FSBO Market Report &rarr;
+      </button>
+      <p style="font-size: 12px; color: var(--text-light); text-align: center; margin-top: 12px;">
+        🔒 We never share your information. No spam. No pressure.
+      </p>
+
+    </form>
+  </div>
+
+  <footer class="site-footer">
+    <p>&copy; 2024 The Listing Lab. All rights reserved.</p>
+  </footer>
+
+</div><!-- /page-fsbo-survey -->
+
+
+<!-- ================================================================
+     PAGE 1B — EXPIRED LISTING SURVEY
+================================================================ -->
+<div id="page-expired-survey" class="page">
+
+  <div class="topbar">
+    <p>Step 1 of 2 &nbsp;&mdash;&nbsp; Listing Rescue Analysis</p>
+  </div>
+
+  <header class="site-header">
+    <div class="container"><div class="logo">The <span>Listing</span> Lab</div></div>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-fill" style="width: 45%;"></div>
+  </div>
+
+  <!-- SECTION 1: SURVEY HEADER -->
+  <div class="survey-header">
+    <div class="survey-header__step">Listing Rescue Analysis</div>
+    <h2 class="survey-header__title">Let's Diagnose Why It Didn't Sell</h2>
+    <p class="survey-header__sub">8 quick questions &mdash; we'll pinpoint exactly what went wrong and how to fix it.</p>
+  </div>
+
+  <!-- SECTION 2: SURVEY FORM -->
+  <div class="form-wrap">
+    <form id="expired-form" onsubmit="return false;">
+
+      <!-- Q1 -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">1</span> When did your listing expire?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="eq1" value="1w"> Within the last week</label>
+          <label class="radio-option"><input type="radio" name="eq1" value="1-4w"> 1&ndash;4 weeks ago</label>
+          <label class="radio-option"><input type="radio" name="eq1" value="1-3m"> 1&ndash;3 months ago</label>
+          <label class="radio-option"><input type="radio" name="eq1" value="3m+"> 3+ months ago</label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q2 -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">2</span> How long was your home on the market before expiring?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="eq2" value="30d"> Under 30 days</label>
+          <label class="radio-option"><input type="radio" name="eq2" value="30-60d"> 30&ndash;60 days</label>
+          <label class="radio-option"><input type="radio" name="eq2" value="60-90d"> 60&ndash;90 days</label>
+          <label class="radio-option"><input type="radio" name="eq2" value="90-180d"> 90&ndash;180 days</label>
+          <label class="radio-option"><input type="radio" name="eq2" value="180d+"> 180+ days</label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q3 -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">3</span> Did you receive any offers during the listing period?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="eq3" value="no"> No offers at all</label>
+          <label class="radio-option"><input type="radio" name="eq3" value="low"> Yes &mdash; but too low</label>
+          <label class="radio-option"><input type="radio" name="eq3" value="fell"> Yes &mdash; deal fell through (inspection, financing, etc.)</label>
+          <label class="radio-option"><input type="radio" name="eq3" value="multiple"> Multiple offers, none closed</label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q4 (multi-select) -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">4</span> Why do you think it didn't sell? <span style="font-weight:400;color:var(--text-light);">(select all that apply)</span></label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="checkbox" name="eq4" value="price"> Price was too high</label>
+          <label class="radio-option"><input type="checkbox" name="eq4" value="marketing"> Not enough marketing / exposure</label>
+          <label class="radio-option"><input type="checkbox" name="eq4" value="photos"> Bad photos / staging</label>
+          <label class="radio-option"><input type="checkbox" name="eq4" value="timing"> Wrong time of year</label>
+          <label class="radio-option"><input type="checkbox" name="eq4" value="agent"> Agent wasn't responsive / proactive</label>
+          <label class="radio-option"><input type="checkbox" name="eq4" value="market"> Market shifted during the listing</label>
+          <label class="radio-option"><input type="checkbox" name="eq4" value="condition"> Property condition issues came up</label>
+          <label class="radio-option"><input type="checkbox" name="eq4" value="unsure"> Not sure &mdash; that's why I'm here</label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q5 -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">5</span> How was your experience with your previous agent?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="eq5" value="great"> Great agent &mdash; just bad timing / market</label>
+          <label class="radio-option"><input type="radio" name="eq5" value="average"> Average &mdash; did the basics, nothing special</label>
+          <label class="radio-option"><input type="radio" name="eq5" value="poor"> Poor &mdash; lack of communication, effort, or strategy</label>
+          <label class="radio-option"><input type="radio" name="eq5" value="terrible"> Terrible &mdash; I regret hiring them</label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q6 -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">6</span> Are you still committed to selling?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="eq6" value="asap"> Yes &mdash; need to sell ASAP</label>
+          <label class="radio-option"><input type="radio" name="eq6" value="different"> Yes &mdash; but want to take a different approach</label>
+          <label class="radio-option"><input type="radio" name="eq6" value="rent"> Considering renting it out instead</label>
+          <label class="radio-option"><input type="radio" name="eq6" value="break"> Taking a break, might relist later</label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q7: Disqualifier -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">7</span> Are you currently interviewing other agents?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="eq7" value="few"> Yes &mdash; talking to a few</label>
+          <label class="radio-option"><input type="radio" name="eq7" value="exploring"> No &mdash; just exploring options</label>
+          <label class="radio-option"><input type="radio" name="eq7" value="chosen"> Yes &mdash; I've already chosen someone</label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q8: Property -->
+      <div class="form-group">
+        <label class="form-label"><span class="q-num">8</span> Tell us about your property</label>
+        <div class="two-col mb-12">
+          <input class="form-input" type="number" name="e_beds" placeholder="Bedrooms" min="1">
+          <input class="form-input" type="number" name="e_baths" placeholder="Bathrooms" min="1">
+        </div>
+        <div class="two-col mb-12">
+          <input class="form-input" type="text" name="e_sqft" placeholder="Square Footage">
+          <select class="form-input" name="e_type">
+            <option value="">Property Type</option>
+            <option>Single Family</option>
+            <option>Condo / Townhome</option>
+            <option>Multi-Family</option>
+            <option>Land / Lot</option>
+          </select>
+        </div>
+        <input class="form-input mb-12" type="text" name="e_price" placeholder="Previous Listing Price (e.g. $575,000)" style="margin-bottom: 10px;">
+        <input class="form-input" type="text" name="e_zip" placeholder="City or Zip Code">
+      </div>
+
+      <hr class="divider">
+
+      <!-- Contact Capture -->
+      <div class="form-group">
+        <label class="form-label">Where should we send your free listing diagnosis?</label>
+        <input class="form-input mb-12" type="text" name="e_name" placeholder="Your Full Name" style="margin-bottom: 10px;">
+        <input class="form-input mb-12" type="email" name="e_email" placeholder="Email Address" style="margin-bottom: 10px;">
+        <input class="form-input" type="tel" name="e_phone" placeholder="Phone Number (we'll call to walk through your diagnosis)">
+      </div>
+
+      <!-- SECTION 3: CTA + URGENCY -->
+      <div class="callout-box">
+        <p>⚡ <strong>Expired listings move fast.</strong> Other agents are already reaching out. Let's get your diagnosis done before you make another move without data.</p>
+      </div>
+
+      <button type="button" class="btn-primary" onclick="submitExpired()">
+        Get My Free "Why It Didn't Sell" Analysis &rarr;
+      </button>
+      <p style="font-size: 12px; color: var(--text-light); text-align: center; margin-top: 12px;">
+        🔒 Your information is private. No spam. No pressure.
+      </p>
+
+    </form>
+  </div>
+
+  <footer class="site-footer">
+    <p>&copy; 2024 The Listing Lab. All rights reserved.</p>
+  </footer>
+
+</div><!-- /page-expired-survey -->
+
+
+<!-- ================================================================
+     PAGE 2A — FSBO RESULTS + SOFT CTA
+================================================================ -->
+<div id="page-fsbo-results" class="page">
+
+  <div class="topbar">
+    <p>Step 2 of 2 &nbsp;&mdash;&nbsp; Your Free FSBO Market Report</p>
+  </div>
+
+  <header class="site-header">
+    <div class="container"><div class="logo">The <span>Listing</span> Lab</div></div>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-fill" style="width: 100%;"></div>
+  </div>
+
+  <!-- SECTION 1: HEADER -->
+  <div class="survey-header">
+    <div class="survey-header__step">Report Ready</div>
+    <h2 class="survey-header__title">Here's What the Market Data<br>Is Telling Us About Your Listing</h2>
+    <p class="survey-header__sub">Based on your answers, we identified 3 key areas affecting your sale.</p>
+  </div>
+
+  <!-- SECTION 2: REPORT SUMMARY -->
+  <section class="results-section">
+    <div class="results-card">
+      <div class="results-card__head">
+        <div class="results-card__badge">FSBO Market Report — Personalized</div>
+        <h3 class="results-card__title">Your Free FSBO Market Analysis</h3>
+        <p class="results-card__sub">Full report on its way to your inbox. Here's your instant summary:</p>
+      </div>
+      <div class="results-card__body">
+
+        <div class="report-list">
+          <div class="report-item">
+            <div class="report-item__check">✓</div>
+            <div>
+              <div class="report-item__title">Comparative Market Analysis vs. Your Asking Price</div>
+              <div class="report-item__sub">We'll show you how your price stacks up against what's actually closing in your market right now.</div>
+            </div>
+          </div>
+          <div class="report-item">
+            <div class="report-item__check">✓</div>
+            <div>
+              <div class="report-item__title">FSBO vs. Agent-Listed Sale Price Gap — Your Area</div>
+              <div class="report-item__sub">The real dollar difference so you can decide if going solo still makes financial sense.</div>
+            </div>
+          </div>
+          <div class="report-item">
+            <div class="report-item__check">✓</div>
+            <div>
+              <div class="report-item__title">3 Things Costing You Money Right Now</div>
+              <div class="report-item__sub">Specific to your answers — pricing gaps, listing exposure blind spots, and buyer experience issues.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: SOFT CTA -->
+        <div class="callout-box">
+          <p>📬 <strong>Check your inbox.</strong> Your full report is on its way. Want to talk through the numbers? Book a free 15-min strategy call — no pitch, no pressure, just data.</p>
+        </div>
+
+        <button class="btn-primary mb-12" onclick="showPage('page-fsbo-booking')" style="margin-bottom: 12px;">
+          Book My Free 15-Min FSBO Strategy Call &rarr;
+        </button>
+        <button class="btn-ghost" onclick="showPage('page-landing')">
+          No thanks &mdash; I'll review the report on my own
+        </button>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>&copy; 2024 The Listing Lab. All rights reserved.</p>
+  </footer>
+
+</div><!-- /page-fsbo-results -->
+
+
+<!-- ================================================================
+     PAGE 2B — EXPIRED RESULTS + DIRECT BOOKING CTA
+================================================================ -->
+<div id="page-expired-results" class="page">
+
+  <div class="topbar">
+    <p>Step 2 of 2 &nbsp;&mdash;&nbsp; Book Your Listing Rescue Consultation</p>
+  </div>
+
+  <header class="site-header">
+    <div class="container"><div class="logo">The <span>Listing</span> Lab</div></div>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-fill" style="width: 100%;"></div>
+  </div>
+
+  <!-- SECTION 1: HEADER -->
+  <div class="survey-header">
+    <div class="survey-header__step">Listing Rescue &mdash; Next Step</div>
+    <h2 class="survey-header__title">We Know Why It Didn't Sell.<br>Now Let's Fix It.</h2>
+    <p class="survey-header__sub">Book your free Listing Rescue Consultation — diagnosis, strategy, and a clear plan to close.</p>
+  </div>
+
+  <!-- SECTION 2: WHAT WE'LL COVER -->
+  <section class="results-section">
+    <div class="results-card">
+      <div class="results-card__head">
+        <div class="results-card__badge">Listing Rescue Consultation &mdash; Free</div>
+        <h3 class="results-card__title">Here's Exactly What We'll Cover</h3>
+        <p class="results-card__sub">Come prepared. Leave with a clear plan and a real timeline.</p>
+      </div>
+      <div class="results-card__body">
+
+        <div class="report-list">
+          <div class="report-item">
+            <div class="report-item__check">1</div>
+            <div>
+              <div class="report-item__title">"Why It Didn't Sell" Diagnosis</div>
+              <div class="report-item__sub">Pricing, photos, marketing reach, agent performance, showing feedback — all of it, honestly assessed.</div>
+            </div>
+          </div>
+          <div class="report-item">
+            <div class="report-item__check">2</div>
+            <div>
+              <div class="report-item__title">Updated CMA — What Your Home Is Worth Today</div>
+              <div class="report-item__sub">Markets move. We'll give you a current, accurate valuation before we relist anything.</div>
+            </div>
+          </div>
+          <div class="report-item">
+            <div class="report-item__check">3</div>
+            <div>
+              <div class="report-item__title">New Marketing Strategy — Tailored to Your Property</div>
+              <div class="report-item__sub">What's different this time. Why buyers will respond. How we position it to sell.</div>
+            </div>
+          </div>
+          <div class="report-item">
+            <div class="report-item__check">4</div>
+            <div>
+              <div class="report-item__title">30&ndash;45 Day Sale Timeline with Clear Milestones</div>
+              <div class="report-item__sub">A specific plan — not vague promises. You'll know exactly what happens next, every step.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: CTA + URGENCY -->
+        <div class="callout-box">
+          <p>⚡ <strong>Spots are limited this week.</strong> Expired listings are time-sensitive — every day without a plan is momentum lost.</p>
+        </div>
+
+        <button class="btn-primary" onclick="showPage('page-expired-booking')">
+          Book My Free Listing Rescue Consultation &rarr;
+        </button>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>&copy; 2024 The Listing Lab. All rights reserved.</p>
+  </footer>
+
+</div><!-- /page-expired-results -->
+
+
+<!-- ================================================================
+     PAGE 3A — FSBO BOOKING (Calendar)
+================================================================ -->
+<div id="page-fsbo-booking" class="page">
+
+  <div class="topbar">
+    <p>Final Step &nbsp;&mdash;&nbsp; Choose Your Strategy Call Time</p>
+  </div>
+
+  <header class="site-header">
+    <div class="container"><div class="logo">The <span>Listing</span> Lab</div></div>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-fill" style="width: 100%;"></div>
+  </div>
+
+  <!-- SECTION 1: BOOKING HEADER -->
+  <section class="booking-section">
+    <div class="container--narrow text-center mb-28">
+      <div class="section-label">Free 15-Min FSBO Strategy Call</div>
+      <h2 class="section-title">Pick a Time That Works for You</h2>
+      <p style="font-size: 15px; color: var(--text-mid); max-width: 400px; margin: 0 auto;">No pitch. No pressure. Just your data, a clear strategy, and honest answers.</p>
+    </div>
+
+    <!-- SECTION 2: CALENDAR -->
+    <div class="booking-card">
+      <!-- REPLACE THIS DIV WITH YOUR GHL/CALENDLY CALENDAR EMBED -->
+      <div class="calendar-placeholder">
+        <span class="calendar-placeholder__icon">📅</span>
+        <span class="calendar-placeholder__text">GHL Calendar Embed Goes Here</span>
+      </div>
+    </div>
+
+    <!-- SECTION 3: WHAT WE'LL COVER -->
+    <div class="what-we-cover">
+      <h4>On this 15-minute call, we'll cover:</h4>
+      <div class="report-list">
+        <div class="report-item">
+          <div class="report-item__check">✓</div>
+          <div class="report-item__title">Your pricing position vs. what's actually closing nearby</div>
+        </div>
+        <div class="report-item">
+          <div class="report-item__check">✓</div>
+          <div class="report-item__title">What FSBO sellers in your area are netting vs. agent-listed sellers</div>
+        </div>
+        <div class="report-item">
+          <div class="report-item__check">✓</div>
+          <div class="report-item__title">A tailored recommendation — including if FSBO is still your best path forward</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="site-footer">
+    <p>&copy; 2024 The Listing Lab. All rights reserved.</p>
+  </footer>
+
+</div><!-- /page-fsbo-booking -->
+
+
+<!-- ================================================================
+     PAGE 3B — EXPIRED BOOKING (Calendar)
+================================================================ -->
+<div id="page-expired-booking" class="page">
+
+  <div class="topbar">
+    <p>Final Step &nbsp;&mdash;&nbsp; Book Your Listing Rescue Consultation</p>
+  </div>
+
+  <header class="site-header">
+    <div class="container"><div class="logo">The <span>Listing</span> Lab</div></div>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-fill" style="width: 100%;"></div>
+  </div>
+
+  <!-- SECTION 1: BOOKING HEADER -->
+  <section class="booking-section">
+    <div class="container--narrow text-center mb-28">
+      <div class="section-label">Free Listing Rescue Consultation</div>
+      <h2 class="section-title">Your Home Still Has Value.<br>Let's Get It Sold.</h2>
+      <p style="font-size: 15px; color: var(--text-mid); max-width: 420px; margin: 0 auto;">Book below — we'll come prepared with your full diagnosis and a ready-to-execute plan.</p>
+    </div>
+
+    <!-- SECTION 2: CALENDAR -->
+    <div class="booking-card">
+      <!-- REPLACE THIS DIV WITH YOUR GHL/CALENDLY CALENDAR EMBED -->
+      <div class="calendar-placeholder">
+        <span class="calendar-placeholder__icon">📅</span>
+        <span class="calendar-placeholder__text">GHL Calendar Embed Goes Here</span>
+      </div>
+    </div>
+
+    <!-- SECTION 3: WHAT WE'LL PREPARE -->
+    <div class="what-we-cover">
+      <h4>What we'll have ready for your consultation:</h4>
+      <div class="report-list">
+        <div class="report-item">
+          <div class="report-item__check">✓</div>
+          <div class="report-item__title">Full diagnosis — why it didn't sell and what to do differently</div>
+        </div>
+        <div class="report-item">
+          <div class="report-item__check">✓</div>
+          <div class="report-item__title">Updated CMA reflecting today's market — not when you listed</div>
+        </div>
+        <div class="report-item">
+          <div class="report-item__check">✓</div>
+          <div class="report-item__title">New marketing plan: pricing, photos, exposure strategy</div>
+        </div>
+        <div class="report-item">
+          <div class="report-item__check">✓</div>
+          <div class="report-item__title">Clear 30&ndash;45 day timeline to get your home sold</div>
+        </div>
+      </div>
+      <div class="callout-box" style="margin-top: 20px; margin-bottom: 0; border-color: rgba(168,85,247,0.35);">
+        <p>🏆 <strong>Your listing didn't fail — the strategy did.</strong> Let's build the right one together.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="site-footer">
+    <p>&copy; 2024 The Listing Lab. All rights reserved.</p>
+  </footer>
+
+</div><!-- /page-expired-booking -->
+
+
+<!-- ================================================================
+     PAGE — DISQUALIFIED (Already Chose Agent)
+================================================================ -->
+<div id="page-disqualified" class="page">
+
+  <div class="topbar">
+    <p>Thank You &nbsp;&mdash;&nbsp; The Listing Lab</p>
+  </div>
+
+  <header class="site-header">
+    <div class="container"><div class="logo">The <span>Listing</span> Lab</div></div>
+  </header>
+
+  <!-- SECTION 1-3: SINGLE FOCUSED MESSAGE -->
+  <section class="disq-section">
+    <div class="container--narrow">
+      <div class="disq-icon">👍</div>
+      <h2 class="disq-title">Sounds Like You're in Good Hands</h2>
+      <p class="disq-sub">
+        It looks like you've already chosen your agent — great! We hope your listing is a huge success. If things change or you're not seeing the results you expected, we're here.
+      </p>
+      <button class="btn-primary" style="max-width: 340px; margin: 0 auto;" onclick="showPage('page-landing')">
+        Back to Home
+      </button>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>&copy; 2024 The Listing Lab. All rights reserved.</p>
+  </footer>
+
+</div><!-- /page-disqualified -->
+
+
+<!-- ================================================================
+     JAVASCRIPT — Minimal page routing + form interaction
+================================================================ -->
+<script>
+  /* Page routing */
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(function(p) {
+      p.classList.remove('active');
+    });
+    var target = document.getElementById(id);
+    if (target) { target.classList.add('active'); }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function startPath(path) {
+    showPage(path === 'fsbo' ? 'page-fsbo-survey' : 'page-expired-survey');
+  }
+
+  /* FSBO submit — routes based on days on market
+     If 60+ days OR multiple failed offers → offer Expired path too (same result page)
+  */
+  function submitFsbo() {
+    showPage('page-fsbo-results');
+  }
+
+  /* Expired submit — disqualify if already chose agent */
+  function submitExpired() {
+    var chosen = document.querySelector('input[name="eq7"][value="chosen"]');
+    if (chosen && chosen.checked) {
+      showPage('page-disqualified');
+      return;
+    }
+    showPage('page-expired-results');
+  }
+
+  /* Radio / checkbox visual selection state */
+  document.addEventListener('change', function(e) {
+    var input = e.target;
+    if (input.type === 'radio') {
+      document.querySelectorAll('input[name="' + input.name + '"]').forEach(function(r) {
+        r.closest('.radio-option').classList.remove('selected');
+      });
+      input.closest('.radio-option').classList.add('selected');
+    }
+    if (input.type === 'checkbox') {
+      input.closest('.radio-option').classList.toggle('selected', input.checked);
+    }
+  });
+</script>
+
+</body>
+</html>
